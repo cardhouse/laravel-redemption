@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Events\RedemptionReceived;
+use App\Http\Controllers\Redemption;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SocialLoginTwitchController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/redemptions', function () {
+    $response = HTTP::withHeaders([
+        'Client-ID' => env('TWITCH_CLIENT_ID'),
+        'Authorization' => 'Bearer ' . Auth::user()->twitch->token,
+        'Content-Type' => 'application/json'
+    ])->get('https://api.twitch.tv/helix/channel_points/custom_rewards', [
+        'broadcaster_id' =>  Auth::user()->twitch->id
+    ]);
+
+    return $response->json();
+});
+
+Route::get('/redeem', function () {
+    RedemptionReceived::dispatch(new Redemption);
+});
+
 Route::get('/subscribe', function () {
     $response = HTTP::withHeaders([
         'Client-ID' => env('TWITCH_CLIENT_ID'),
@@ -33,11 +51,11 @@ Route::get('/subscribe', function () {
         ],
         'transport' => [
             'method' => 'webhook',
-            'callback' => 'https://laravel.test/twitch/callback',
+            'callback' => 'https://91c637230add.ngrok.io/api/twitch/callback',
             'secret' => 'open_sesame'
         ]
     ]);
-    return $response;
+    return redirect('/redemptions');
 });
 
 Route::get('/subscribe/list', function () {
@@ -66,6 +84,11 @@ Route::get('/subscribe/clear', function () {
     }
 });
 
-Route::post('/twitch/callback', function (Request $request) {
-    return json_decode($request->body())->challenge;
+Route::prefix('twitch')->group(function () {
+    Route::get('/login', [SocialLoginTwitchController::class, 'redirect']);
+    Route::get('/oauth/return', [SocialLoginTwitchController::class, 'return']);
 });
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return Inertia\Inertia::render('Dashboard');
+})->name('dashboard');
