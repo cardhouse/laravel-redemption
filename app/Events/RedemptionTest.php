@@ -2,29 +2,28 @@
 
 namespace App\Events;
 
-use App\Models\Twitch\Redemption;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-// use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 
-class RedemptionReceived implements ShouldBroadcastNow
+class RedemptionTest implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $redemption;
-
+    private $event;
+    
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Redemption $redemption)
+    public function __construct($event)
     {
-        $this->redemption = $redemption;
+        $this->event = $event;
     }
 
     /**
@@ -34,7 +33,6 @@ class RedemptionReceived implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        // return new Channel('redemptions-548965051');
-        return new Channel($this->redemption->getChannel());
+        return new PrivateChannel('redemptions-548965051');
     }
 }

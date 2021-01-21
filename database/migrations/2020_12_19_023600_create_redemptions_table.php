@@ -15,6 +15,9 @@ class CreateRedemptionsTable extends Migration
     {
         Schema::create('redemptions', function (Blueprint $table) {
             $table->id();
+            $table->text('name');
+            $table->text('redeemer');
+            $table->integer('cost');
             $table->timestamps();
         });
     }

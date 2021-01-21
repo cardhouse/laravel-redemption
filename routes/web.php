@@ -5,7 +5,10 @@ use App\Http\Controllers\Redemption;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialLoginTwitchController;
+use App\Services\Twitch\Api;
+use App\Services\TwitchSubscriptionService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,27 +26,27 @@ Route::get('/', function () {
 });
 
 Route::get('/redemptions', function () {
-    $response = HTTP::withHeaders([
-        'Client-ID' => env('TWITCH_CLIENT_ID'),
-        'Authorization' => 'Bearer ' . Auth::user()->twitch->token,
-        'Content-Type' => 'application/json'
-    ])->get('https://api.twitch.tv/helix/channel_points/custom_rewards', [
-        'broadcaster_id' =>  Auth::user()->twitch->id
-    ]);
+    $twitch = Auth::user()->twitch;
+    $response = Api::getRedemption($twitch->id, '8ff4cff1-bbc0-4f0b-bc83-f0afd040d7bd');
 
-    return $response->json();
+    return $response->body();
 });
 
-Route::get('/redeem', function () {
-    RedemptionReceived::dispatch(new Redemption);
+Route::get('/force', function () {
+    Auth::loginUsingId(2, true);
+    return Auth::user()->twitch;
 });
 
 Route::get('/subscribe', function () {
+    // dd(env('TWITCH_ACCESS_TOKEN'));
+    // return TwitchSubscriptionService::subscribe('channel.channel_points_custom_reward_redemption.add');
+    // return redirect('/subscribe/list');
     $response = HTTP::withHeaders([
         'Client-ID' => env('TWITCH_CLIENT_ID'),
         'Authorization' => 'Bearer ' . env('TWITCH_ACCESS_TOKEN'),
         'Content-Type' => 'application/json'
     ])->post('https://api.twitch.tv/helix/eventsub/subscriptions', [
+        // 'type' => $channel,
         'type' => 'channel.channel_points_custom_reward_redemption.add',
         'version' => 1,
         'condition' => [
@@ -51,11 +54,12 @@ Route::get('/subscribe', function () {
         ],
         'transport' => [
             'method' => 'webhook',
-            'callback' => 'https://91c637230add.ngrok.io/api/twitch/callback',
+            'callback' => env('NGROK_ENDPOINT') . '/api/twitch/callback',
             'secret' => 'open_sesame'
         ]
     ]);
-    return redirect('/redemptions');
+
+    return $response;
 });
 
 Route::get('/subscribe/list', function () {
@@ -87,8 +91,11 @@ Route::get('/subscribe/clear', function () {
 Route::prefix('twitch')->group(function () {
     Route::get('/login', [SocialLoginTwitchController::class, 'redirect']);
     Route::get('/oauth/return', [SocialLoginTwitchController::class, 'return']);
+    Route::get('/oauth/refresh', [SocialLoginTwitchController::class, 'refresh'])->middleware('auth');
+    Route::get('/logout', [SocialLoginTwitchController::class, 'logout'])->middleware('auth');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia\Inertia::render('Dashboard');
-})->name('dashboard');
+Route::get('/clear', function () {
+    Cache::flush();
+    abort(204);
+});

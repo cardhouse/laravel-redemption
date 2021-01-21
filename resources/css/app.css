@@ -1,3 +1,51 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+body {padding: 12px 24px;letter-spacing: .05em;color:white;}
+
+
+h1,h2,p {padding: 0;margin:6px 0 0 0;}
+h2 {font-size: 1.5em;}
+
+ul,li {padding-left:0;list-style-type: none;margin-bottom:8px}
+
+.username {font-weight: 700;}
+
+.card {
+	display: flex;
+	flex-direction: row;
+	justify-content: stretch;
+	font-size: .8em;
+	background-color: rgba(0,0,0,0.5);
+	padding: 18px;
+	border-radius: 6px;
+	width: 360px;
+	box-shadow: 1px 6px 12px -9px rgba(0,0,0,0.3);
+		
+		&-icon {margin-right: 8px;}
+		&-info {padding: 0 8px;width:200px;}
+		&-time {
+			display: flex;
+			flex-direction:column;
+			justify-content: center;
+			font-size: 1.8em;
+			font-weight: 700;
+			margin: 0 auto;
+			width:80px;
+			
+			p {text-align:center;margin:12px auto;}
+	}
+	
+		&-cost {
+
+			display:flex;
+			flex-direction: column-reverse;
+			font-size: .7em;
+			text-align:center;
+			margin: 0 auto;
+			width:80px;
+			
+			img {width: 30px;height:30px;margin: 0 auto;}
+	}
+}

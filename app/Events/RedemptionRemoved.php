@@ -5,13 +5,13 @@ namespace App\Events;
 use App\Models\Twitch\Redemption;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-// use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 
-class RedemptionReceived implements ShouldBroadcastNow
+class RedemptionRemoved  implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -34,7 +34,6 @@ class RedemptionReceived implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        // return new Channel('redemptions-548965051');
         return new Channel($this->redemption->getChannel());
     }
 }

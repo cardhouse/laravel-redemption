@@ -25,7 +25,7 @@ class ValidateTwitchCall
         $check = hash_hmac($algo, $message, $secret);
         
         if($signature != $algo.'='.$check) {
-            return response([], 401);
+            abort(401);
         }
         return $next($request);
     }
