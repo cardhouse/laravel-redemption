@@ -34,10 +34,10 @@ class SocialLoginTwitchController extends Controller
     }
 
     public function refresh(SocialTwitchAccount $account) {
-        $account = Auth::user()->twitch;
+        // $account = Auth::user()->twitch;
         $url = 'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token='. $account->refreshToken .'&client_id='. env('TWITCH_CLIENT_ID') .'&client_secret='.env('TWITCH_CLIENT_SECRET');
         $response = Http::post($url, []);
-        dd($response->json());
+        // dd($response->json());
         $account->token = $response->json('access_token');
         $account->save();
 

@@ -27,7 +27,7 @@ class TwitchSubscriptionService
         return $response;
     }
 
-    private static function getHeaders()
+    public static function getHeaders()
     {
         return [
             'Client-ID' => env('TWITCH_CLIENT_ID'),

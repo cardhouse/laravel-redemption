@@ -34,6 +34,7 @@ Route::post('/twitch/callback', function (Request $request) {
             }
             $redemption = Redemption::make($request->json('event'));
             $redemption->event_id = $request->json('event.id');
+            $redemption->image = $redemption->getProfilePic();
             Cache::put($request->json('event.id'), $redemption, 86400);
             RedemptionReceived::dispatch($redemption);
             return response('', 200);
@@ -44,7 +45,6 @@ Route::post('/twitch/callback', function (Request $request) {
             return response('', 200);
             break;
     }
-    // });
 })->middleware('validate.twitch');
 
 Route::post('/broadcasting', function (Request $request) {
