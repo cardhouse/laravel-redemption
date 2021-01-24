@@ -28,7 +28,7 @@ class TwitchSubscriptionService
 
         Log::warning("Payload we are sending", $payload);
 
-        return $payload;
+        return $response;
     }
 
     public static function getHeaders()

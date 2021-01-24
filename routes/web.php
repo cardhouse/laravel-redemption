@@ -39,27 +39,10 @@ Route::get('/force', function () {
 
 Route::get('/subscribe', function () {
     // dd(env('TWITCH_ACCESS_TOKEN'));
-    // return TwitchSubscriptionService::subscribe('channel.channel_points_custom_reward_redemption.add');
+    $sub = TwitchSubscriptionService::subscribe('channel.channel_points_custom_reward_redemption.add');
     // return redirect('/subscribe/list');
-    $response = HTTP::withHeaders([
-        'Client-ID' => env('TWITCH_CLIENT_ID'),
-        'Authorization' => 'Bearer ' . env('TWITCH_ACCESS_TOKEN'),
-        'Content-Type' => 'application/json'
-    ])->post('https://api.twitch.tv/helix/eventsub/subscriptions', [
-        // 'type' => $channel,
-        'type' => 'channel.channel_points_custom_reward_redemption.add',
-        'version' => 1,
-        'condition' => [
-            'broadcaster_user_id' => '548965051'
-        ],
-        'transport' => [
-            'method' => 'webhook',
-            'callback' => env('NGROK_ENDPOINT') . '/api/twitch/callback',
-            'secret' => 'open_sesame'
-        ]
-    ]);
 
-    return $response;
+    return $sub;
 });
 
 Route::get('/subscribe/list', function () {
