@@ -26,9 +26,9 @@ class TwitchSubscriptionService
         ];
         $response = Http::withHeaders(self::getHeaders())->post(self::API_ENDPOINT, $payload);
 
-        Log::info("Payload we are sending",$payload);
+        Log::warning("Payload we are sending", $payload);
 
-        return $response;
+        return $payload;
     }
 
     public static function getHeaders()
