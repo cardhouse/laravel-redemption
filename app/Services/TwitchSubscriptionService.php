@@ -19,7 +19,7 @@ class TwitchSubscriptionService
             ],
             'transport' => [
                 'method' => 'webhook',
-                'callback' => 'https://39bd86910dd6.ngrok.io:443/api/twitch/callback',
+                'callback' => env('APP_URL') . '/api/twitch/callback',
                 'secret' => 'open_sesame'
             ]
         ]);
