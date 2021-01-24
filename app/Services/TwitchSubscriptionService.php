@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class TwitchSubscriptionService
 {
@@ -10,7 +11,7 @@ class TwitchSubscriptionService
 
     public static function subscribe($channel)
     {
-        $response = Http::withHeaders(self::getHeaders())->post(self::API_ENDPOINT, [
+        $payload = [
             // 'type' => $channel,
             'type' => 'channel.channel_points_custom_reward_redemption.add',
             'version' => 1,
@@ -22,7 +23,10 @@ class TwitchSubscriptionService
                 'callback' => env('APP_URL') . ':443/api/twitch/callback',
                 'secret' => 'open_sesame'
             ]
-        ]);
+        ];
+        $response = Http::withHeaders(self::getHeaders())->post(self::API_ENDPOINT, $payload);
+
+        Log::info("Payload we are sending",$payload);
 
         return $response;
     }
