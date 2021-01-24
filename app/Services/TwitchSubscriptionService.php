@@ -19,7 +19,7 @@ class TwitchSubscriptionService
             ],
             'transport' => [
                 'method' => 'webhook',
-                'callback' => env('APP_URL') . '/api/twitch/callback',
+                'callback' => env('APP_URL') . ':443/api/twitch/callback',
                 'secret' => 'open_sesame'
             ]
         ]);
