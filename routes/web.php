@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Cache;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('auth');
 
 Route::get('/redemptions', function () {
     $twitch = Auth::user()->twitch;
@@ -38,9 +38,7 @@ Route::get('/force', function () {
 });
 
 Route::get('/subscribe', function () {
-    // dd(env('TWITCH_ACCESS_TOKEN'));
     $sub = TwitchSubscriptionService::subscribe('channel.channel_points_custom_reward_redemption.add');
-    // return redirect('/subscribe/list');
 
     return $sub;
 });

@@ -23,14 +23,14 @@ class SocialLoginTwitchController extends Controller
         $oauth = Socialite::driver('twitch')->user();
         $user = $service->createOrGetUser($oauth);
         Auth::login($user);
-        return redirect('/success');
+        return redirect('/');
     }
 
     public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/twitch/login');
+        return redirect('/');
     }
 
     public function refresh(SocialTwitchAccount $account) {
@@ -41,6 +41,6 @@ class SocialLoginTwitchController extends Controller
         $account->token = $response->json('access_token');
         $account->save();
 
-        return redirect('/redemptions');
+        return $account->fresh();
     }
 }
