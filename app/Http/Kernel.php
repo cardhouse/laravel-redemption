@@ -61,7 +61,8 @@ class Kernel extends HttpKernel
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'twitch.validate' => \App\Http\Middleware\Twitch\Validate::class,
+        'twitch.unique' => \App\Http\Middleware\Twitch\EnsureUnique::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'validate.twitch' => \App\Http\Middleware\ValidateTwitchCall::class,
     ];
 }

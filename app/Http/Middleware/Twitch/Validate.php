@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Twitch;
 
 use Closure;
 use Illuminate\Http\Request;
 
-class ValidateTwitchCall
+class Validate
 {
     /**
      * Handle an incoming request.
@@ -20,7 +20,7 @@ class ValidateTwitchCall
         $timestamp = $request->header('Twitch-Eventsub-Message-Timestamp');
         $id = $request->header('Twitch-Eventsub-Message-Id');
         $message = $id . $timestamp . $request->getContent();
-        $secret = 'open_sesame';
+        $secret = env('TWITCH_MESSAGE_SECRET', "314159");
         $algo = 'sha256';
         $check = hash_hmac($algo, $message, $secret);
         
