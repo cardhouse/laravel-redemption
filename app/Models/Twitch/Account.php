@@ -28,6 +28,7 @@ class Account extends Model
         ]);
         $url = 'https://id.twitch.tv/oauth2/token' . $query;
         $response = Http::post($url, []);
+        dd($query, $url, $response);
         Log::info("Response received from twitch", ['response' => $response->json()]);
         $this->token = $response->json('access_token');
         $this->save();
