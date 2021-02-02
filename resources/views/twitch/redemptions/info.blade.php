@@ -11,7 +11,7 @@
         https://redemptions.cardhouse.online?b={{ $broadcaster->id }}
     @else
         There was an issue setting up the listener.
-        <span>{{ $listener->json('message') }}</span>
+        <span>{{ $listener->status() }}</span>
     @endif
 </body>
 </html>
