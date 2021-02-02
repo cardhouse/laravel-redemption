@@ -7,7 +7,7 @@
 </head>
 <body>
     <p>Put this into your OBS setup:</p>
-    @if($listener->status() == 409 || $listener->status() == 200)
+    @if($listener->status() == 409 || $listener->status() == 202)
         https://redemptions.cardhouse.online?b={{ $broadcaster->id }}
     @else
         There was an issue setting up the listener.
