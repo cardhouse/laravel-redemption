@@ -59,22 +59,23 @@ Route::get('/subscribe/list', function () {
     return $response;
 });
 
-Route::get('/subscribe/clear', function () {
+Route::get('/subscribe/clear/{listener}', function ($listener) {
     $response = HTTP::withHeaders([
         'Client-ID' => env('TWITCH_CLIENT_ID'),
         'Authorization' => 'Bearer ' . env('TWITCH_ACCESS_TOKEN'),
         'Content-Type' => 'application/json'
     ])->get('https://api.twitch.tv/helix/eventsub/subscriptions');
 
-    foreach (json_decode($response->body())->data as $listener) {
+
+    // foreach (json_decode($response->body())->data as $listener) {
         HTTP::withHeaders([
             'Client-ID' => env('TWITCH_CLIENT_ID'),
             'Authorization' => 'Bearer ' . env('TWITCH_ACCESS_TOKEN'),
             'Content-Type' => 'application/json'
         ])->delete('https://api.twitch.tv/helix/eventsub/subscriptions', [
-            'id' => $listener->id
+            'id' => $listener
         ]);
-    }
+    // }
 });
 
 Route::prefix('twitch')->group(function () {
