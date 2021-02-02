@@ -25,7 +25,7 @@ Route::get('/', function () {
 })->middleware('auth');
 
 Route::get('/redemptions/setup', function () {
-    $listener = TwitchSubscriptionService::subscribe();
+    $listener = TwitchSubscriptionService::subscribe(Auth::user()->twitch->id);
 
     Log::info("Listener started up for a broadcaster", [
         'status' => $listener->status()

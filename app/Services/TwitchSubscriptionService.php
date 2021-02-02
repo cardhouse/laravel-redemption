@@ -10,13 +10,13 @@ class TwitchSubscriptionService
 {
     const API_ENDPOINT = 'https://api.twitch.tv/helix/eventsub/subscriptions';
 
-    public static function subscribe()
+    public static function subscribe($broadcaster)
     {
         $payload = [
             'type' => 'channel.channel_points_custom_reward_redemption.add',
             'version' => 1,
             'condition' => [
-                'broadcaster_user_id' => Auth::user()->twitch->id
+                'broadcaster_user_id' => $broadcaster
             ],
             'transport' => [
                 'method' => 'webhook',
@@ -24,11 +24,22 @@ class TwitchSubscriptionService
                 'secret' => env('TWITCH_MESSAGE_SECRET')
             ]
         ];
-        $response = Http::withHeaders(self::getHeaders())->post(self::API_ENDPOINT, $payload);
-
-        Log::warning("Payload we are sending", $payload);
+        $response = Http::withHeaders(self::getHeaders())
+            ->post(self::API_ENDPOINT, $payload);
 
         return $response;
+    }
+
+    public static function getList()
+    {
+        return HTTP::withHeaders(self::getHeaders())
+        ->get(self::API_ENDPOINT);
+    }
+
+    public static function clear()
+    {
+        $current_subscriptions = HTTP::withHeaders(self::getHeaders())
+            ->get(self::API_ENDPOINT);
     }
 
     public static function getHeaders()
