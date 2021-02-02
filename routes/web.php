@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialLoginTwitchController;
-use App\Services\Twitch\Api;
 use App\Services\TwitchSubscriptionService;
+use App\Services\Twitch\Api;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

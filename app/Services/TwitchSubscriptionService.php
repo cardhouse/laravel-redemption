@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class TwitchSubscriptionService
 {
@@ -24,7 +22,7 @@ class TwitchSubscriptionService
                 'secret' => env('TWITCH_MESSAGE_SECRET')
             ]
         ];
-        
+
         $response = Http::withHeaders(self::getHeaders())
             ->post(self::API_ENDPOINT, $payload);
 
