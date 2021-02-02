@@ -1,7 +1,5 @@
 <?php
 
-use App\Events\RedemptionReceived;
-use App\Http\Controllers\Redemption;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialLoginTwitchController;
@@ -27,6 +25,7 @@ Route::get('/', function () {
 
 Route::get('/redemptions', function () {
     $twitch = Auth::user()->twitch;
+    dd($twitch);
     $response = Api::getRedemption($twitch->id, '8ff4cff1-bbc0-4f0b-bc83-f0afd040d7bd');
 
     return $response->body();
@@ -35,12 +34,6 @@ Route::get('/redemptions', function () {
 Route::get('/force', function () {
     Auth::loginUsingId(2, true);
     return Auth::user()->twitch;
-});
-
-Route::get('/subscribe', function () {
-    $sub = TwitchSubscriptionService::subscribe('channel.channel_points_custom_reward_redemption.add');
-
-    return $sub;
 });
 
 Route::get('/subscribe/list', function () {
@@ -70,10 +63,18 @@ Route::get('/subscribe/clear', function () {
 });
 
 Route::prefix('twitch')->group(function () {
+    // OAuth endpoints
+    Route::middleware('auth')->group(function () {
+        Route::get('/refresh', [SocialLoginTwitchController::class, 'refresh']);
+        Route::get('/logout', [SocialLoginTwitchController::class, 'logout']);
+    });
     Route::get('/login', [SocialLoginTwitchController::class, 'redirect']);
     Route::get('/oauth/return', [SocialLoginTwitchController::class, 'return']);
-    Route::get('/oauth/refresh', [SocialLoginTwitchController::class, 'refresh'])->middleware('auth');
-    Route::get('/logout', [SocialLoginTwitchController::class, 'logout'])->middleware('auth');
+
+    // Subscribe to listeners
+    Route::prefix('eventsub')->group(function () {
+        Route::get('/create', [TwitchSubscriptionService::class, 'subscribe']);
+    });
 });
 
 Route::get('/clear', function () {

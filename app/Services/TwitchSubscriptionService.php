@@ -9,10 +9,9 @@ class TwitchSubscriptionService
 {
     const API_ENDPOINT = 'https://api.twitch.tv/helix/eventsub/subscriptions';
 
-    public static function subscribe($channel)
+    public static function subscribe()
     {
         $payload = [
-            // 'type' => $channel,
             'type' => 'channel.channel_points_custom_reward_redemption.add',
             'version' => 1,
             'condition' => [
@@ -21,7 +20,7 @@ class TwitchSubscriptionService
             'transport' => [
                 'method' => 'webhook',
                 'callback' => env('APP_URL') . ':443/api/twitch/callback',
-                'secret' => 'open_sesame'
+                'secret' => env('TWITCH_MESSAGE_SECRET')
             ]
         ];
         $response = Http::withHeaders(self::getHeaders())->post(self::API_ENDPOINT, $payload);

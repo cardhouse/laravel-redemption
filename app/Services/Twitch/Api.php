@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class Api
 {
+    
     public static function getRedemption($broadcaster_id, $reward_id = null)
     {
         $response = Http::withToken(Auth::user()->twitch->token)->withHeaders([

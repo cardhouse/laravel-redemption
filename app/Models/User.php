@@ -61,6 +61,6 @@ class User extends Authenticatable
 
     public function twitch()
     {
-        return $this->hasOne(SocialTwitchAccount::class);
+        return $this->hasOne(\App\Models\Twitch\Account::class);
     }
 }

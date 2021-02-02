@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\SocialTwitchAccount as TwitchAccount;
+use App\Models\Twitch\Account as TwitchAccount;
 use Laravel\Socialite\Contracts\User as OauthUser;
 
 class SocialTwitchAccountService
@@ -17,8 +17,8 @@ class SocialTwitchAccountService
         }
 
         $account = new TwitchAccount($oauth->user);
-        $account->token = $oauth->token;
         $account->refreshToken = $oauth->refreshToken;
+        $account->token = $oauth->token;
 
         $user = User::whereEmail($oauth->getEmail())->first();
 

@@ -20,10 +20,11 @@ class Redemption extends Model
 
     public function getProfilePic()
     {
-        $response = Http::withHeaders(TwitchSubscriptionService::getHeaders())->get('https://api.twitch.tv/helix/users', ['id' => $this->user_id]);
+        $response = Http::withHeaders(TwitchSubscriptionService::getHeaders())
+            ->get('https://api.twitch.tv/helix/users', [
+                'id' => $this->user_id
+            ]);
 
-        $user = $response->json('data');
-
-        return $user[0]['profile_image_url'];
+        return $response->json('data.0.profile_image_url');
     }
 }

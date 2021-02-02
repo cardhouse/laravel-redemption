@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Laravel\Socialite\Facades\Socialite;
 use App\Services\SocialTwitchAccountService;
-use App\Models\SocialTwitchAccount;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class SocialLoginTwitchController extends Controller
 {
@@ -33,14 +31,7 @@ class SocialLoginTwitchController extends Controller
         return redirect('/');
     }
 
-    public function refresh(SocialTwitchAccount $account) {
-        // $account = Auth::user()->twitch;
-        $url = 'https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token='. $account->refreshToken .'&client_id='. env('TWITCH_CLIENT_ID') .'&client_secret='.env('TWITCH_CLIENT_SECRET');
-        $response = Http::post($url, []);
-        // dd($response->json());
-        $account->token = $response->json('access_token');
-        $account->save();
-
-        return $account->fresh();
+    public function refresh() {
+        return Auth::user()->twitch->refresh();
     }
 }
