@@ -7,6 +7,7 @@ use App\Services\Twitch\Api;
 use App\Services\TwitchSubscriptionService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,15 @@ Route::get('/', function () {
 })->middleware('auth');
 
 Route::get('/redemptions/setup', function () {
-    return view('twitch.redemptions.info', ['broadcaster' => Auth::user()->twitch]);
+    $listener = TwitchSubscriptionService::subscribe();
+
+    Log::info("Listener started up for a broadcaster", [
+        'status' => $listener->status()
+    ]);
+
+    return view('twitch.redemptions.info', [
+        'broadcaster' => Auth::user()->twitch
+    ]);
 })->middleware('auth');
 
 Route::get('/redemptions', function () {
