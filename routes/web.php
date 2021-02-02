@@ -32,7 +32,8 @@ Route::get('/redemptions/setup', function () {
     ]);
 
     return view('twitch.redemptions.info', [
-        'broadcaster' => Auth::user()->twitch
+        'broadcaster' => Auth::user()->twitch,
+        'listener' => $listener->body()
     ]);
 })->middleware('auth');
 

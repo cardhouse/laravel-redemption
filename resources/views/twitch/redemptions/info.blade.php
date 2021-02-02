@@ -8,5 +8,6 @@
 <body>
     <p>Put this into your OBS setup:</p>
     https://redemptions.cardhouse.online?b={{ $broadcaster->id }}
+    <p>{{ $listener }}</p>
 </body>
 </html>
