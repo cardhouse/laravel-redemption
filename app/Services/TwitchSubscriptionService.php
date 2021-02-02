@@ -16,7 +16,7 @@ class TwitchSubscriptionService
             'type' => 'channel.channel_points_custom_reward_redemption.add',
             'version' => 1,
             'condition' => [
-                'broadcaster_user_id' => $broadcaster
+                'broadcaster_user_id' => (string)$broadcaster
             ],
             'transport' => [
                 'method' => 'webhook',
