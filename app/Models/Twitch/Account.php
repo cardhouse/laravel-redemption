@@ -26,10 +26,8 @@ class Account extends Model
             'client_id' => env('TWITCH_CLIENT_ID'),
             'client_secret' => env('TWITCH_CLIENT_SECRET')
         ]);
-        $url = 'https://id.twitch.tv/oauth2/token' . $query;
+        $url = 'https://id.twitch.tv/oauth2/token?' . $query;
         $response = Http::post($url, []);
-        dd($query, $url, $response);
-        Log::info("Response received from twitch", ['response' => $response->json()]);
         $this->token = $response->json('access_token');
         $this->save();
 
