@@ -20,7 +20,11 @@ use Illuminate\Support\Facades\Cache;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
+})->middleware('auth');
+
+Route::get('/redemptions/setup', function () {
+    return view('twitch.redemptions.info', ['broadcaster' => Auth::user()->twitch]);
 })->middleware('auth');
 
 Route::get('/redemptions', function () {
@@ -51,6 +55,7 @@ Route::get('/subscribe/clear', function () {
         'Authorization' => 'Bearer ' . env('TWITCH_ACCESS_TOKEN'),
         'Content-Type' => 'application/json'
     ])->get('https://api.twitch.tv/helix/eventsub/subscriptions');
+
     foreach (json_decode($response->body())->data as $listener) {
         HTTP::withHeaders([
             'Client-ID' => env('TWITCH_CLIENT_ID'),
@@ -74,6 +79,8 @@ Route::prefix('twitch')->group(function () {
     // Subscribe to listeners
     Route::prefix('eventsub')->middleware('auth')->group(function () {
         Route::get('/create', [TwitchSubscriptionService::class, 'subscribe']);
+        Route::get('/status', [TwitchSubscriptionService::class, 'status']);
+        Route::get('/remove', [TwitchSubscriptionService::class, 'remove']);
     });
 });
 
