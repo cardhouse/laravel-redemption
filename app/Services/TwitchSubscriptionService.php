@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -15,7 +16,7 @@ class TwitchSubscriptionService
             'type' => 'channel.channel_points_custom_reward_redemption.add',
             'version' => 1,
             'condition' => [
-                'broadcaster_user_id' => '548965051'
+                'broadcaster_user_id' => Auth::user()->twitch->id
             ],
             'transport' => [
                 'method' => 'webhook',

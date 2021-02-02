@@ -72,7 +72,7 @@ Route::prefix('twitch')->group(function () {
     Route::get('/oauth/return', [SocialLoginTwitchController::class, 'return']);
 
     // Subscribe to listeners
-    Route::prefix('eventsub')->group(function () {
+    Route::prefix('eventsub')->middleware('auth')->group(function () {
         Route::get('/create', [TwitchSubscriptionService::class, 'subscribe']);
     });
 });
