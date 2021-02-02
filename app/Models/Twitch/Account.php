@@ -5,6 +5,7 @@ namespace App\Models\Twitch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Account extends Model
 {
@@ -27,6 +28,7 @@ class Account extends Model
         ]);
         $url = 'https://id.twitch.tv/oauth2/token' . $query;
         $response = Http::post($url, []);
+        Log::info("Response received from twitch", ['response' => $response]);
         $this->token = $response->json('access_token');
         $this->save();
 
