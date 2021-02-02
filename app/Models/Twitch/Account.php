@@ -12,6 +12,8 @@ class Account extends Model
 
     protected $guarded = ['created_at'];
 
+    protected $table = 'social_twitch_accounts';
+
     public function user() {
         return $this->belongsTo('\App\Models\User');
     }
