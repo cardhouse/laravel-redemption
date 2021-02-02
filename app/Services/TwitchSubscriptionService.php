@@ -24,6 +24,7 @@ class TwitchSubscriptionService
                 'secret' => env('TWITCH_MESSAGE_SECRET')
             ]
         ];
+        dd($payload);
         $response = Http::withHeaders(self::getHeaders())
             ->post(self::API_ENDPOINT, $payload);
 
