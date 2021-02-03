@@ -7,25 +7,18 @@ use Illuminate\Support\Facades\Auth;
 
 class Redemption extends Controller
 {
-    
-    protected $broadcaster;
-
-    public function __construct()
-    {
-        $this->broadcaster = Auth::user()->twitch;
-    }
     public function setup()
     {
-        $listener = TwitchSubscriptionService::subscribe($this->broadcaster->id);
+        $listener = TwitchSubscriptionService::subscribe(Auth::user()->twitch->id);
     
         return view('twitch.redemptions.info', [
-            'broadcaster' => $this->broadcaster,
+            'broadcaster' =>  Auth::user()->twitch,
             'listener' => $listener
         ]);
     }
 
     public function index()
     {
-        return app('twitch')->broadcaster($this->broadcaster)->getRedemption();
+        return app('twitch')->broadcaster(Auth::user()->twitch)->getRedemption();
     }
 }
