@@ -50,7 +50,7 @@ class Api
             );
         }
 
-        return $response;
+        return collect($response->json('data'));
     }
 
     protected function headers()
