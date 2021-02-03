@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\SocialLoginTwitchController;
 use App\Services\TwitchSubscriptionService;
-use App\Services\Twitch\Api;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -22,19 +21,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('dashboard');
-})->middleware('auth');
-
-Route::get('/redemptions/setup', function () {
-    $listener = TwitchSubscriptionService::subscribe(Auth::user()->twitch->id);
-
-    Log::info("Listener started up for a broadcaster", [
-        'status' => $listener->status()
-    ]);
-
-    return view('twitch.redemptions.info', [
-        'broadcaster' => Auth::user()->twitch,
-        'listener' => $listener
-    ]);
 })->middleware('auth');
 
 Route::get('/redemptions', function () {
@@ -92,6 +78,12 @@ Route::prefix('twitch')->group(function () {
         Route::get('/create', [TwitchSubscriptionService::class, 'subscribe']);
         Route::get('/status', [TwitchSubscriptionService::class, 'status']);
         Route::get('/remove', [TwitchSubscriptionService::class, 'remove']);
+    });
+
+    Route::prefix('redemptions')->middleware('auth')->group(function () {
+        Route::get('/setup', [\App\Http\Controllers\Redemption::class, 'setup']);
+        Route::get('/', [\App\Http\Controllers\Redemption::class, 'index']);
+        Route::get('/{redemption}', [\App\Http\Controllers\Redemption::class, 'show']);
     });
 });
 
