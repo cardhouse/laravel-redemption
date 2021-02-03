@@ -28,17 +28,15 @@ class EventSubController extends Controller
                     ->broadcaster($broadcaster)
                     ->getRedemption($request->json('event.reward.id'));
 
-                if (
-                    $reward->count() == 1
-                    && !$reward->first()['should_redemptions_skip_request_queue']
-                ) {
+                if($reward->count() == 1) { $reward = $reward->first(); }
+                if (!$reward['should_redemptions_skip_request_queue']) {
                     $redemption = Redemption::make($request->json('event'));
                     $redemption->event_id = $request->json('event.id');
                     $redemption->image = $redemption->getProfilePic();
                     Cache::put($request->json('event.id'), $redemption, 86400);
                     RedemptionReceived::dispatch($redemption);
-                    CountUpdated::dispatch($redemption, $reward->first()['redemptions_redeemed_current_stream']);
                 }
+                CountUpdated::dispatch($redemption, $reward['redemptions_redeemed_current_stream']);
                 return response('', 200);
             default:
                 return response('', 200);
