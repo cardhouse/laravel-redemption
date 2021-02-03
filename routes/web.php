@@ -45,8 +45,8 @@ Route::get('/redemptions', function () {
     return $response->body();
 });
 
-Route::get('/force', function () {
-    Auth::loginUsingId(1, true);
+Route::get('/force/{id}', function ($id) {
+    Auth::loginUsingId($id, true);
     return Auth::user()->twitch;
 });
 
