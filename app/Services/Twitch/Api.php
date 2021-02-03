@@ -2,22 +2,69 @@
 
 namespace App\Services\Twitch;
 
+use App\Models\Twitch\Account;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class Api
 {
-    
-    public static function getRedemption($broadcaster_id, $reward_id = null)
+    protected $token;
+    protected $broadcaster;
+
+    public function __construct()
     {
-        $response = Http::withToken(Auth::user()->twitch->token)->withHeaders([
+        $this->token = env('TWITCH_ACCESS_TOKEN');
+        $this->broadcaster = null;
+    }
+
+    public function broadcaster(Account $broadcaster)
+    {
+        $this->token = $broadcaster->token;
+        $this->broadcaster = $broadcaster;
+
+        return $this;
+    }
+
+    public function getRedemption($reward_id = null)
+    {
+        $response = $this->_call(
+            'get', 
+            'https://api.twitch.tv/helix/channel_points/custom_rewards',
+            [
+                'broadcaster_id' =>  $this->broadcaster->id,
+                'id' => $reward_id
+            ]
+        );
+
+        if ($response->status() === 401) {
+            $refreshed = $this->broadcaster->refresh();
+            $this->broadcaster($refreshed);
+
+            return $this->_call(
+                'get', 
+                'https://api.twitch.tv/helix/channel_points/custom_rewards',
+                [
+                    'broadcaster_id' =>  $this->broadcaster->id,
+                    'id' => $reward_id
+                ]
+            );
+        }
+
+        return $response;
+    }
+
+    protected function headers()
+    {
+        return [
             'Client-ID' => env('TWITCH_CLIENT_ID'),
             'Content-Type' => 'application/json'
-        ])->get('https://api.twitch.tv/helix/channel_points/custom_rewards', [
-            'broadcaster_id' =>  $broadcaster_id,
-            'id' => $reward_id
-        ]);
-    
-        return $response;
+        ];
+    }
+
+    protected function _call($method, $endpoint, $payload)
+    {
+        return Http::withToken($this->token)
+            ->withHeaders($this->headers())
+            ->$method($endpoint, $payload);
     }
 }

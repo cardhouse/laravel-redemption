@@ -39,14 +39,14 @@ Route::get('/redemptions/setup', function () {
 
 Route::get('/redemptions', function () {
     $twitch = Auth::user()->twitch;
-    dd($twitch);
-    $response = Api::getRedemption($twitch->id, '8ff4cff1-bbc0-4f0b-bc83-f0afd040d7bd');
+    // dd($twitch);
+    $response = app('twitch')->getRedemption();
 
     return $response->body();
 });
 
 Route::get('/force', function () {
-    Auth::loginUsingId(2, true);
+    Auth::loginUsingId(1, true);
     return Auth::user()->twitch;
 });
 

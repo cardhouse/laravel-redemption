@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        App\Providers\TwitchServiceProvider::class,
 
         /*
          * Application Service Providers...
