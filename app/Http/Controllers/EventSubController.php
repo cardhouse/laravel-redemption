@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
 use App\Models\Twitch\Account;
 use Illuminate\Http\Request;
-use App\Models\Redemption;
+use App\Models\Twitch\Redemption;
 
 class EventSubController extends Controller
 {
