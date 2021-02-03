@@ -23,26 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/twitch/callback', function (Request $request) {
-    switch ($request->header('Twitch-Eventsub-Message-Type')) {
-        case 'webhook_callback_verification':
-            return $request->input('challenge');
-            break;
-        case 'revocation':
-            ListenerRevoked::dispatch($request->json('subscription.id'));
-            abort(204);
-        case 'notification':
-            $redemption = Redemption::make($request->json('event'));
-            $redemption->event_id = $request->json('event.id');
-            $redemption->image = $redemption->getProfilePic();
-            Cache::put($request->json('event.id'), $redemption, 86400);
-            RedemptionReceived::dispatch($redemption);
-            return response('', 200);
-        default:
-            return response('', 200);
-            break;
-    }
-})->middleware(['twitch.validate', 'twitch.unique']);
+Route::post('/twitch/callback', [\App\Http\Controllers\EventSubController::class, 'receive'])->middleware(['twitch.validate', 'twitch.unique']);
 
 Route::post('/broadcasting', function (Request $request) {
     $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'));
