@@ -11,7 +11,7 @@
         <h2>Redemption Widget</h2>
         <p>
             In order to access the redemption widget, 
-            <a href="{{ url('/redemptions/setup') }}">follow these directions</a>
+            <a href="{{ url('/twitch/redemptions/setup') }}">follow these directions</a>
         </p>
     </div>
 </body>

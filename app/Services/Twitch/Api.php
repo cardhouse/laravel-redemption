@@ -25,6 +25,13 @@ class Api
         return $this;
     }
 
+    /**
+     * Get collection of redemptions offered for a broadcaster
+     * Optionally include Reward ID to get one result.
+     *
+     * @param string $reward_id
+     * @return \Illuminate\Support\Collection
+     */
     public function getRedemption($reward_id = null)
     {
         $response = $this->_call(
