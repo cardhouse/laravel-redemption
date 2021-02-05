@@ -26,7 +26,7 @@ class EventSubController extends Controller
                 $broadcaster = $this->getBroadcaster($request->json('event.broadcaster_user_id'));
                 $reward = app('twitch')
                     ->broadcaster($broadcaster)
-                    ->getRedemption($request->json('event.reward.id'));
+                    ->getReward($request->json('event.reward.id'));
 
                 if($reward->count() == 1) { $reward = $reward->first(); }
                 $redemption = Redemption::make($request->json('event'));

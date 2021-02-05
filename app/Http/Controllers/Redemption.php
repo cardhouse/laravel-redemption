@@ -19,6 +19,13 @@ class Redemption extends Controller
 
     public function index()
     {
-        return app('twitch')->broadcaster(Auth::user()->twitch)->getRedemption();
+        $rewards = app('twitch')->broadcaster(Auth::user()->twitch)->getReward();
+        
+        return $rewards->filter(function ($reward) {
+            return (
+              $reward['max_per_stream_setting']['is_enabled']
+              && !$reward['should_redemptions_skip_request_queue']
+            );
+        });
     }
 }
