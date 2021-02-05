@@ -66,12 +66,12 @@ Route::get('/subscribe/clear/{listener}', function ($listener) {
 
 Route::prefix('twitch')->group(function () {
     // OAuth endpoints
+    Route::get('/login', [SocialLoginTwitchController::class, 'redirect']);
+    Route::get('/oauth/return', [SocialLoginTwitchController::class, 'return']);
     Route::middleware('auth')->group(function () {
         Route::get('/refresh', [SocialLoginTwitchController::class, 'refresh']);
         Route::get('/logout', [SocialLoginTwitchController::class, 'logout']);
     });
-    Route::get('/login', [SocialLoginTwitchController::class, 'redirect']);
-    Route::get('/oauth/return', [SocialLoginTwitchController::class, 'return']);
 
     // Subscribe to listeners
     Route::prefix('eventsub')->middleware('auth')->group(function () {
@@ -80,6 +80,7 @@ Route::prefix('twitch')->group(function () {
         Route::get('/remove', [TwitchSubscriptionService::class, 'remove']);
     });
 
+    // Redemption endpoints
     Route::prefix('redemptions')->middleware('auth')->group(function () {
         Route::get('/setup', [\App\Http\Controllers\Redemption::class, 'setup']);
         Route::get('/', [\App\Http\Controllers\Redemption::class, 'index']);
