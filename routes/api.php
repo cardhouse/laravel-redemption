@@ -1,12 +1,10 @@
 <?php
 
-use App\Events\ListenerRevoked;
-use App\Events\RedemptionReceived;
-use App\Models\Twitch\Account;
-use App\Models\Twitch\Redemption;
+use Pusher\Pusher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Pusher\Pusher;
+use App\Models\Twitch\Account;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,8 +37,9 @@ Route::get('/start/{broadcaster}/counter', function(Request $request, $broadcast
         ->first();
 
     return response()->json([
-        'name' => $redemption['title'],
+        'name' => Str::plural($redemption['title']),
         'image' => $redemption['image']['url_2x'],
+        'color' => $redemption['background_color'],
         'count' => $redemption['redemptions_redeemed_current_stream'] ?: 0
     ]);
 });
