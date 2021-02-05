@@ -40,6 +40,7 @@ Route::get('/start/{broadcaster}/counter', function(Request $request, $broadcast
 
     return response()->json([
         'name' => $redemption['title'],
+        'image' => $redemption['image']['url_2x'],
         'count' => $redemption['redemptions_redeemed_current_stream'] ?: 0
     ]);
 });
