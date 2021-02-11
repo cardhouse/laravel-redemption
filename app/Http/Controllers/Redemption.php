@@ -21,11 +21,15 @@ class Redemption extends Controller
     {
         $rewards = app('twitch')->broadcaster(Auth::user()->twitch)->getReward();
         
-        return $rewards->filter(function ($reward) {
+        $valid = $rewards->filter(function ($reward) {
             return (
               $reward['max_per_stream_setting']['is_enabled']
               && !$reward['should_redemptions_skip_request_queue']
             );
-        });
+        })->pluck('id', 'title');
+
+        return view('twitch.counters')
+            ->with('rewards', $valid)
+            ->with('broadcaster', Auth::user()->twitch);
     }
 }
