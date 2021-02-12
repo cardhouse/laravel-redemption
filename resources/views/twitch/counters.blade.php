@@ -7,7 +7,7 @@
 
 <ul class="flex flex-col">
     @foreach($rewards as $title => $id)
-        <a href="http://localhost:3000/count?b={{ $broadcaster->id }}&r={{ $id }}">{{ $title }}</a>
+        <a href="https://redemptions.cardhouse.online/count?b={{ $broadcaster->id }}&r={{ $id }}">{{ $title }}</a>
     @endforeach
 </ul>
 
