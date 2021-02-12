@@ -4,7 +4,7 @@
 <h1 class="text-2xl font-bold text-center py-3">Hello {{ $broadcaster->display_name }}</h1>
 <p class="py-3">You have made it to the widget counter section of the site. Good job.</p>
 <h2 class="text-lg font-bold underline">Setting up your stream</h2>
-<p class="py-3">In order to get the redemption counter on your stream, copy the URL of any of the links below, and make a Browser Source in OBS for that url.</p>
+<p class="py-3">In order to get the redemption counter on your stream, copy the URL of any of the links below (right click and Copy Link Address) then make a Browser Source in OBS for that url.</p>
 <h2 class="text-lg font-bold underline">Available Counters:</h2>
 <ul class="flex">
     @foreach($rewards as $title => $id)
