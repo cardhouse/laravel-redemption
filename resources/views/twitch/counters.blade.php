@@ -6,9 +6,11 @@
 <h2 class="text-lg font-bold underline">Setting up your stream</h2>
 <p>In order to get the redemption counter on your stream, copy the URL of any of the links below, and make a Browser Source in OBS for that url.</p>
 
-<ul class="flex flex-col">
+<ul class="flex">
     @foreach($rewards as $title => $id)
-        <a href="https://redemptions.cardhouse.online/count?b={{ $broadcaster->id }}&r={{ $id }}">{{ $title }}</a>
+        <div class="w-5 m-2 h-5">
+            <a href="https://redemptions.cardhouse.online/count?b={{ $broadcaster->id }}&r={{ $id }}">{{ $title }}</a>
+        </div>
     @endforeach
 </ul>
 <h2 class="text-lg font-bold underline">Size the browser source appropriately</h2>
