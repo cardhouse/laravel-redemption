@@ -20,6 +20,7 @@ class Redemption extends Controller
     public function index()
     {
         $rewards = app('twitch')->broadcaster(Auth::user()->twitch)->getReward();
+        TwitchSubscriptionService::subscribe(Auth::user()->twitch->id);
         
         $valid = $rewards->filter(function ($reward) {
             return (
