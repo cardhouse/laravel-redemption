@@ -8,7 +8,7 @@
 <h2 class="text-lg font-bold underline">Available Counters:</h2>
 <ul class="flex">
     @foreach($rewards as $title => $id)
-        <div class="m-2">
+        <div class="m-2 p-3 border-2 border-gray-500 shadow-inner">
             <a href="https://redemptions.cardhouse.online/count?b={{ $broadcaster->id }}&r={{ $id }}">{{ $title }}</a>
         </div>
     @endforeach
