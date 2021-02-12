@@ -6,7 +6,7 @@
 <h2 class="text-lg font-bold underline">Setting up your stream</h2>
 <p class="py-3">In order to get the redemption counter on your stream, copy the URL of any of the links below (right click and Copy Link Address) then make a Browser Source in OBS for that url.</p>
 <h2 class="text-lg font-bold underline">Available Counters:</h2>
-<ul class="flex">
+<ul class="flex flex-wrap">
     @foreach($rewards as $title => $id)
         <div class="m-2 p-3 border-2 border-gray-300 rounded-lg shadow-inner">
             <a href="https://redemptions.cardhouse.online/count?b={{ $broadcaster->id }}&r={{ $id }}">{{ $title }}</a>
