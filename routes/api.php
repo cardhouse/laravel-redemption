@@ -43,3 +43,9 @@ Route::get('/start/{broadcaster}/counter', function(Request $request, $broadcast
         'count' => $redemption['redemptions_redeemed_current_stream'] ?: 0
     ]);
 });
+
+Route::prefix('clout')->group(function () {
+    Route::get('/{term}/add', [App\Http\Controllers\CloutController::class, 'addClout']);
+    Route::get('/{term}/subtract', [App\Http\Controllers\CloutController::class, 'removeClout']);
+    Route::get('/{term}', [App\Http\Controllers\CloutController::class, 'getClout']);
+});
